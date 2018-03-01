@@ -20,6 +20,10 @@ import {
 export let activeInstance: any = null
 export let isUpdatingChildComponent: boolean = false
 
+/**
+ * 初始化生命周期状态
+ * @param vm
+ */
 export function initLifecycle (vm: Component) {
   const options = vm.$options
 

@@ -10,6 +10,10 @@ import {
 import { updateListeners } from '../vdom/helpers/index'
 
 export function initEvents (vm: Component) {
+  /**
+   * Object.create(null) 用于创建一个空原型链继承对象
+   * null 既无属性，也无原型
+   */
   vm._events = Object.create(null)
   vm._hasHookEvent = false
   // init parent attached events
