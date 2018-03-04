@@ -14,6 +14,10 @@ const idToTemplate = cached(id => {
   return el && el.innerHTML
 })
 
+/**
+ * 缓存 Vue.prototype.$mount,
+ * 下面会覆盖整个方法
+ */
 const mount = Vue.prototype.$mount
 Vue.prototype.$mount = function (
   el?: string | Element,
@@ -54,6 +58,7 @@ Vue.prototype.$mount = function (
         return this
       }
     } else if (el) {
+      // 获取模板
       template = getOuterHTML(el)
     }
     if (template) {
@@ -62,6 +67,8 @@ Vue.prototype.$mount = function (
         mark('compile')
       }
 
+      // 在 compiler/to-function.js 方法 createCompileToFunctionFn
+      // 得到 render 函数
       const { render, staticRenderFns } = compileToFunctions(template, {
         shouldDecodeNewlines,
         shouldDecodeNewlinesForHref,

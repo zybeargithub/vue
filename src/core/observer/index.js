@@ -49,6 +49,7 @@ export class Observer {
       augment(value, arrayMethods, arrayKeys)
       this.observeArray(value)
     } else {
+      // 为每一个data属性添加拦截
       this.walk(value)
     }
   }
@@ -118,6 +119,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
     Object.isExtensible(value) &&
     !value._isVue
   ) {
+    // 劫持属性
     ob = new Observer(value)
   }
   if (asRootData && ob) {
@@ -147,6 +149,10 @@ export function defineReactive (
   const getter = property && property.get
   const setter = property && property.set
 
+  /**
+   * 为 data 数据设置 getter 和 setter
+   * @type {*}
+   */
   let childOb = !shallow && observe(val)
   Object.defineProperty(obj, key, {
     enumerable: true,
@@ -180,6 +186,7 @@ export function defineReactive (
         val = newVal
       }
       childOb = !shallow && observe(newVal)
+      // 发布更新
       dep.notify()
     }
   })

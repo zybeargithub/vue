@@ -20,10 +20,6 @@ import {
 export let activeInstance: any = null
 export let isUpdatingChildComponent: boolean = false
 
-/**
- * 初始化生命周期状态
- * @param vm
- */
 export function initLifecycle (vm: Component) {
   const options = vm.$options
 
@@ -51,6 +47,12 @@ export function initLifecycle (vm: Component) {
 }
 
 export function lifecycleMixin (Vue: Class<Component>) {
+  /**
+   * vm.update() 则会对比新的 vdom 和当前 vdom，并把差异的部分渲染到真正的 DOM 树上
+   * @param vnode
+   * @param hydrating
+   * @private
+   */
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
     if (vm._isMounted) {
@@ -144,6 +146,13 @@ export function lifecycleMixin (Vue: Class<Component>) {
   }
 }
 
+/**
+ * 定义 mount
+ * @param vm
+ * @param el
+ * @param hydrating
+ * @returns {Component}
+ */
 export function mountComponent (
   vm: Component,
   el: ?Element,
@@ -170,6 +179,7 @@ export function mountComponent (
       }
     }
   }
+  // 触发 beforeMount 生命周期钩子
   callHook(vm, 'beforeMount')
 
   let updateComponent
@@ -200,6 +210,7 @@ export function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+  // 定义 Watcher 建立 model 和 view 的联系
   new Watcher(vm, updateComponent, noop, null, true /* isRenderWatcher */)
   hydrating = false
 

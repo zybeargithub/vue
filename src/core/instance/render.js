@@ -24,7 +24,7 @@ export function initRender (vm: Component) {
   vm.$slots = resolveSlots(options._renderChildren, renderContext)
   vm.$scopedSlots = emptyObject
   // bind the createElement fn to this instance
-  // so that we get proper（adj 固有的 特有的） render context inside it.
+  // so that we get proper render context inside it.
   // args order: tag, data, children, normalizationType, alwaysNormalize
   // internal version is used by render functions compiled from templates
   vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
@@ -45,6 +45,7 @@ export function initRender (vm: Component) {
       !isUpdatingChildComponent && warn(`$listeners is readonly.`, vm)
     }, true)
   } else {
+    // 添加 '$atttrs' 和 '$listeners' 属性
     defineReactive(vm, '$attrs', parentData && parentData.attrs || emptyObject, null, true)
     defineReactive(vm, '$listeners', options._parentListeners || emptyObject, null, true)
   }
@@ -58,6 +59,13 @@ export function renderMixin (Vue: Class<Component>) {
     return nextTick(fn, this)
   }
 
+  /**
+   * 生成 vNode 对象
+   * 执行前面compiler生成的render方法，并返回一个vNode对象
+   *
+   * @returns {VNode} 返回一个 VNode 对象
+   * @private
+   */
   Vue.prototype._render = function (): VNode {
     const vm: Component = this
     const { render, _parentVnode } = vm.$options

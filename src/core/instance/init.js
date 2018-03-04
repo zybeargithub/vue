@@ -20,7 +20,6 @@ export function initMixin (Vue: Class<Component>) {
 
     let startTag, endTag
     /* istanbul ignore if */
-    // process.env.NODE_ENV 在 rollup 打包后会被替换
     if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
       startTag = `vue-perf-start:${vm._uid}`
       endTag = `vue-perf-end:${vm._uid}`
@@ -37,7 +36,7 @@ export function initMixin (Vue: Class<Component>) {
       initInternalComponent(vm, options)
     } else {
       vm.$options = mergeOptions(
-        resolveConstructorOptions(vm.constructor),// resolve 分解
+        resolveConstructorOptions(vm.constructor),
         options || {},
         vm
       )
@@ -48,14 +47,14 @@ export function initMixin (Vue: Class<Component>) {
     } else {
       vm._renderProxy = vm
     }
-    // expose real self 显示自己
+    // expose real self
     vm._self = vm
     initLifecycle(vm)
     initEvents(vm)
     initRender(vm)
     callHook(vm, 'beforeCreate')
     initInjections(vm) // resolve injections before data/props
-    initState(vm)
+    initState(vm)// 劫持数据环节，并添加 watcher
     initProvide(vm) // resolve provide after data/props
     callHook(vm, 'created')
 

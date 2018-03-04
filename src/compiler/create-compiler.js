@@ -5,11 +5,19 @@ import { detectErrors } from './error-detector'
 import { createCompileToFunctionFn } from './to-function'
 
 export function createCompilerCreator (baseCompile: Function): Function {
+  /**
+   * 创建一个 compiler 并返回
+   */
   return function createCompiler (baseOptions: CompilerOptions) {
-    function compile (
-      template: string,
-      options?: CompilerOptions
-    ): CompiledResult {
+
+    /**
+     * 定义 compile 函数
+     * 调用 compile 方法拿到 render 函数 的字符串形式
+     * @param template
+     * @param options
+     * @returns {*}
+     */
+    function compile (template: string, options?: CompilerOptions): CompiledResult {
       const finalOptions = Object.create(baseOptions)
       const errors = []
       const tips = []
@@ -38,6 +46,7 @@ export function createCompilerCreator (baseCompile: Function): Function {
         }
       }
 
+      // baseCompile 在 compiler下定义
       const compiled = baseCompile(template, finalOptions)
       if (process.env.NODE_ENV !== 'production') {
         errors.push.apply(errors, detectErrors(compiled.ast))
@@ -47,6 +56,7 @@ export function createCompilerCreator (baseCompile: Function): Function {
       return compiled
     }
 
+    // 返回 compile 和 createCompileToFunctionFn
     return {
       compile,
       compileToFunctions: createCompileToFunctionFn(compile)

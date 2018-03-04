@@ -8,6 +8,12 @@ type CompiledFunctionResult = {
   staticRenderFns: Array<Function>;
 };
 
+/**
+ * 将字符串转换成 Function 对象
+ * @param code
+ * @param errors
+ * @returns {*}
+ */
 function createFunction (code, errors) {
   try {
     return new Function(code)
@@ -20,11 +26,10 @@ function createFunction (code, errors) {
 export function createCompileToFunctionFn (compile: Function): Function {
   const cache = Object.create(null)
 
-  return function compileToFunctions (
-    template: string,
-    options?: CompilerOptions,
-    vm?: Component
-  ): CompiledFunctionResult {
+  /**
+   * 主要将 template 编译成 render 函数
+   */
+  return function compileToFunctions (template: string, options?: CompilerOptions, vm?: Component): CompiledFunctionResult {
     options = extend({}, options)
     const warn = options.warn || baseWarn
     delete options.warn
@@ -48,6 +53,7 @@ export function createCompileToFunctionFn (compile: Function): Function {
     }
 
     // check cache
+    // 首先从缓存中读取
     const key = options.delimiters
       ? String(options.delimiters) + template
       : template
@@ -56,6 +62,7 @@ export function createCompileToFunctionFn (compile: Function): Function {
     }
 
     // compile
+    // 如果没有缓存 ，调用 compile 方法拿到 render 函数 的字符串形式
     const compiled = compile(template, options)
 
     // check compilation errors/tips
@@ -73,9 +80,10 @@ export function createCompileToFunctionFn (compile: Function): Function {
     }
 
     // turn code into functions
+    // 将函数字符串形成，转换成Function对象
     const res = {}
     const fnGenErrors = []
-    res.render = createFunction(compiled.render, fnGenErrors)
+    res.render = createFunction(compiled.render, fnGenErrors)// 将函数字符串形成，转换成Function对象
     res.staticRenderFns = compiled.staticRenderFns.map(code => {
       return createFunction(code, fnGenErrors)
     })
@@ -94,6 +102,7 @@ export function createCompileToFunctionFn (compile: Function): Function {
       }
     }
 
+    // 记录至缓存中
     return (cache[key] = res)
   }
 }

@@ -1,5 +1,8 @@
 /* @flow */
 
+/**
+ * 定义 VNode 数据结构
+ */
 export default class VNode {
   tag: string | void;
   data: VNodeData | void;
