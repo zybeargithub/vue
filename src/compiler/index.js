@@ -12,10 +12,15 @@ import { createCompilerCreator } from './create-compiler'
 // compile 函数中三个核心步骤的介绍，
 // compile 之后我们得到了 render 函数 的字符串形式，
 // 后面通过 new Function 得到真正的渲染函数
-export const createCompiler = createCompilerCreator(function baseCompile (
-  template: string,
-  options: CompilerOptions
-): CompiledResult {
+// 运行函数并赋值给 createCompiler ；等同于 create-compiler.js 中的 createCompiler
+export const createCompiler = createCompilerCreator(
+  /**
+   * 定义 baseCompile 函数
+   * @param template
+   * @param options
+   * @returns {{ast: *, render: string, staticRenderFns: Array.<string>}}
+   */
+  function baseCompile (template: string, options: CompilerOptions): CompiledResult {
   /**
    * 主要功能是将 template字符串解析成 AST。
    * 前面定义了ASTElement的数据结构，
@@ -41,4 +46,6 @@ export const createCompiler = createCompilerCreator(function baseCompile (
     render: code.render,
     staticRenderFns: code.staticRenderFns
   }
-})
+}
+
+)

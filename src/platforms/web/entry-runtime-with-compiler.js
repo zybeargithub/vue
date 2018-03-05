@@ -23,6 +23,7 @@ Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
 ): Component {
+  // 将el转换为DOM节点
   el = el && query(el)
 
   /* istanbul ignore if */
@@ -68,7 +69,7 @@ Vue.prototype.$mount = function (
       }
 
       // 在 compiler/to-function.js 方法 createCompileToFunctionFn
-      // 得到 render 函数
+      // 将DOM数字符串编译为函数
       const { render, staticRenderFns } = compileToFunctions(template, {
         shouldDecodeNewlines,
         shouldDecodeNewlinesForHref,
@@ -89,6 +90,8 @@ Vue.prototype.$mount = function (
 }
 
 /**
+ * 返回 HTML 格式字符串，并兼容IE的SVG的情况，
+ * 注意返回 String 类型
  * Get outerHTML of elements, taking care
  * of SVG elements in IE as well.
  */
@@ -96,6 +99,7 @@ function getOuterHTML (el: Element): string {
   if (el.outerHTML) {
     return el.outerHTML
   } else {
+    // 兼容IE的SVG
     const container = document.createElement('div')
     container.appendChild(el.cloneNode(true))
     return container.innerHTML

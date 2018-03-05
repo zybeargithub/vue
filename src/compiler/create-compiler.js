@@ -7,6 +7,10 @@ import { createCompileToFunctionFn } from './to-function'
 export function createCompilerCreator (baseCompile: Function): Function {
   /**
    * 创建一个 compiler 并返回
+   * Object {
+   *    compile ：compile，
+   *    compileToFunctions： compileToFunctions
+   *  }
    */
   return function createCompiler (baseOptions: CompilerOptions) {
 
@@ -46,7 +50,8 @@ export function createCompilerCreator (baseCompile: Function): Function {
         }
       }
 
-      // baseCompile 在 compiler下定义
+      // baseCompile 在 compiler/index.js 下定义
+      // 转换成 AST 形式
       const compiled = baseCompile(template, finalOptions)
       if (process.env.NODE_ENV !== 'production') {
         errors.push.apply(errors, detectErrors(compiled.ast))
@@ -59,7 +64,7 @@ export function createCompilerCreator (baseCompile: Function): Function {
     // 返回 compile 和 createCompileToFunctionFn
     return {
       compile,
-      compileToFunctions: createCompileToFunctionFn(compile)
+      compileToFunctions: createCompileToFunctionFn(compile)// 集成 to-function.js 中的 compileToFunctions
     }
   }
 }

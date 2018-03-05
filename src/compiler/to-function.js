@@ -23,11 +23,17 @@ function createFunction (code, errors) {
   }
 }
 
+/**
+ * 创建 compileToFunctions 并返回
+ * @param compile
+ * @returns {compileToFunctions}
+ */
 export function createCompileToFunctionFn (compile: Function): Function {
+  // 定义缓存对象
   const cache = Object.create(null)
 
   /**
-   * 主要将 template 编译成 render 函数
+   * 主要将 template dom字符串 编译成 render 函数
    */
   return function compileToFunctions (template: string, options?: CompilerOptions, vm?: Component): CompiledFunctionResult {
     options = extend({}, options)
@@ -53,7 +59,7 @@ export function createCompileToFunctionFn (compile: Function): Function {
     }
 
     // check cache
-    // 首先从缓存中读取
+    // 1、从缓存中读取
     const key = options.delimiters
       ? String(options.delimiters) + template
       : template
@@ -62,7 +68,7 @@ export function createCompileToFunctionFn (compile: Function): Function {
     }
 
     // compile
-    // 如果没有缓存 ，调用 compile 方法拿到 render 函数 的字符串形式
+    // 2、没有缓存 ，调用 compile 方法拿到 render 函数 的字符串形式
     const compiled = compile(template, options)
 
     // check compilation errors/tips
