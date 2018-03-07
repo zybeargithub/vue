@@ -1,5 +1,6 @@
 /**
- * 生成真正的 DOM
+ * VNode只是Virtual DOM，需要通过DOM Diff之后，来生成真正的DOM节点。
+ *
  * Virtual DOM patching algorithm based on Snabbdom by
  * Simon Friis Vindum (@paldepind)
  * Licensed under the MIT License
@@ -692,6 +693,9 @@ export function createPatchFunction (backend) {
     }
   }
 
+  /**
+   * 入口
+   */
   return function patch (oldVnode, vnode, hydrating, removeOnly, parentElm, refElm) {
     if (isUndef(vnode)) {
       if (isDef(oldVnode)) invokeDestroyHook(oldVnode)

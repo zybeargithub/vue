@@ -323,8 +323,8 @@ function createWatcher (
 }
 
 export function stateMixin (Vue: Class<Component>) {
-  // flow somehow has problems with directly declared definition object
-  // when using Object.defineProperty, so we have to procedurally build up
+  // flow somehow(莫名其妙) has problems with directly declared definition object
+  // when using Object.defineProperty, so we have to procedurally（程序上的） build up
   // the object here.
   const dataDef = {}
   dataDef.get = function () { return this._data }

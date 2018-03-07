@@ -1,10 +1,15 @@
 /* @flow */
 
+
+/*** 打包入口 ****/
+/*** VUE 入口  ****/
+/*** 打包入口 ****/
+
 import config from 'core/config'
 import { warn, cached } from 'core/util/index'
 import { mark, measure } from 'core/util/perf'
 
-import Vue from './runtime/index'
+import Vue from './runtime/index'// 实际上是core/index.js的 Vue
 import { query } from './util/index'
 import { compileToFunctions } from './compiler/index'
 import { shouldDecodeNewlines, shouldDecodeNewlinesForHref } from './util/compat'

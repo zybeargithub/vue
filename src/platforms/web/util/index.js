@@ -11,6 +11,7 @@ export * from './element'
  */
 export function query (el: string | Element): Element {
   if (typeof el === 'string') {
+    // 新增加的方法，用于选择器（类似jquery）
     const selected = document.querySelector(el)
     if (!selected) {
       process.env.NODE_ENV !== 'production' && warn(

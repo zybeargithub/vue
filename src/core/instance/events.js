@@ -43,6 +43,10 @@ export function updateComponentListeners (
   target = undefined
 }
 
+/**
+ * 为 Vue 定义事件的添加、移除、事件发布等方法，使得Vue可以监听和派发事件
+ * @param Vue
+ */
 export function eventsMixin (Vue: Class<Component>) {
   const hookRE = /^hook:/
   Vue.prototype.$on = function (event: string | Array<string>, fn: Function): Component {

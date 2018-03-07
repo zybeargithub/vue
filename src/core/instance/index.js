@@ -12,6 +12,11 @@ import { warn } from '../util/index'
 // 4、当数据发生变化时，Render函数执行生成VNode对象
 // 5、通过patch方法，对比新旧VNode对象，通过DOM Diff算法，添加、修改、删除真正的DOM元素
 
+/**
+ * 定义 Vue ，并未 Vue 添加必要方法
+ * @param options
+ * @constructor
+ */
 function Vue (options) {
   if (process.env.NODE_ENV !== 'production' &&
     !(this instanceof Vue)
@@ -21,11 +26,12 @@ function Vue (options) {
   this._init(options)
 }
 
-initMixin(Vue)
+// 最先执行的一批初始化代码处
+initMixin(Vue)// 为 Vue 添加 _init
 stateMixin(Vue)
-eventsMixin(Vue)
-lifecycleMixin(Vue)
+eventsMixin(Vue) // 为 Vue 添加事件注册、注销、发布功能
+lifecycleMixin(Vue) // 为 Vue 添加 _update、_destroy 等重点方法
 // 渲染的核心方法，用来生成render函数和vNode
-renderMixin(Vue)
+renderMixin(Vue)// 为 Vue 添加 _render 方法
 
 export default Vue
