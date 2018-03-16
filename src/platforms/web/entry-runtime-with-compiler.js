@@ -75,6 +75,7 @@ Vue.prototype.$mount = function (
 
       // 在 compiler/to-function.js 方法 createCompileToFunctionFn
       // 将DOM数字符串编译为函数
+      // 对象的解构赋值（还有数组的一种形式）
       const { render, staticRenderFns } = compileToFunctions(template, {
         shouldDecodeNewlines,
         shouldDecodeNewlinesForHref,

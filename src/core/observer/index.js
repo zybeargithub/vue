@@ -41,7 +41,7 @@ export class Observer {
     this.value = value
     this.dep = new Dep()
     this.vmCount = 0
-    def(value, '__ob__', this)
+    def(value, '__ob__', this) // value 挂载自己
     if (Array.isArray(value)) {
       const augment = hasProto
         ? protoAugment

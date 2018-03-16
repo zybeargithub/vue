@@ -48,7 +48,7 @@ export function initLifecycle (vm: Component) {
 
 export function lifecycleMixin (Vue: Class<Component>) {
   /**
-   * vm.update() 则会对比新的 vdom 和当前 vdom，并把差异的部分渲染到真正的 DOM 树上
+   * vm.update() 则会对比（diff算法）新的 vdom 和当前 vdom，并把差异的部分渲染到真正的 DOM 树上
    * @param vnode
    * @param hydrating
    * @private
@@ -203,14 +203,16 @@ export function mountComponent (
     }
   } else {
     updateComponent = () => {
-      vm._update(vm._render(), hydrating)
+      vm._update(vm._render(), hydrating) // 执行 _render() 拿到 VNode
     }
   }
 
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+
   // 定义 Watcher 建立 model 和 view 的联系
+  // 在 Wathcer 的 getter 执行 updateComponent 函数
   new Watcher(vm, updateComponent, noop, null, true /* isRenderWatcher */)
   hydrating = false
 

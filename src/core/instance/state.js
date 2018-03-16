@@ -36,10 +36,10 @@ const sharedPropertyDefinition = {
 }
 
 /**
- * 劫持data
- * @param target
- * @param sourceKey
- * @param key
+ * vm 代理 data
+ * @param target vm对象
+ * @param sourceKey '_data_' 属性名称
+ * @param key 对象的值
  */
 export function proxy (target: Object, sourceKey: string, key: string) {
   sharedPropertyDefinition.get = function proxyGetter () {
@@ -141,6 +141,7 @@ function initData (vm: Component) {
   const props = vm.$options.props
   const methods = vm.$options.methods
   let i = keys.length
+  // 倒叙循环，vm 依次代理 _data 的 key
   while (i--) {
     const key = keys[i]
     if (process.env.NODE_ENV !== 'production') {
@@ -161,7 +162,8 @@ function initData (vm: Component) {
       proxy(vm, `_data`, key)
     }
   }
-  // observe data
+
+  // 第三阶段：观察者模式
   observe(data, true /* asRootData */)
 }
 
