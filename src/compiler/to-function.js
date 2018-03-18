@@ -24,6 +24,9 @@ function createFunction (code, errors) {
 }
 
 /**
+ * 主要是起到缓存render函数对象的作用，
+ * 采用闭包的特性
+ *
  * 创建 compileToFunctions 并返回
  * @param compile
  * @returns {compileToFunctions}

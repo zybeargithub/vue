@@ -24,6 +24,13 @@ const idToTemplate = cached(id => {
  * 下面会覆盖整个方法
  */
 const mount = Vue.prototype.$mount
+
+/**
+ * 将template转换为render的function,然后mount（）
+ * @param el
+ * @param hydrating
+ * @returns {*}
+ */
 Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
@@ -82,6 +89,8 @@ Vue.prototype.$mount = function (
         delimiters: options.delimiters,
         comments: options.comments
       }, this)
+
+      // 存储到 options上，在render上调用并生成VNode
       options.render = render
       options.staticRenderFns = staticRenderFns
 

@@ -53,6 +53,12 @@ export function initRender (vm: Component) {
 
 export function renderMixin (Vue: Class<Component>) {
   // install runtime convenience helpers
+  /**
+   * 为 Vue 添加解析工具类方法
+   * 这些方法，在 render 函数调用时，会被按需调用
+   * 主要是用来生成 VNode
+   * 主要几个方法： _c _v _l _s
+   */
   installRenderHelpers(Vue.prototype)
 
   Vue.prototype.$nextTick = function (fn: Function) {
@@ -68,7 +74,7 @@ export function renderMixin (Vue: Class<Component>) {
    */
   Vue.prototype._render = function (): VNode {
     const vm: Component = this
-    const { render, _parentVnode } = vm.$options
+    const { render, _parentVnode } = vm.$options // 提取 render 和 renderFenction
 
     // reset _rendered flag on slots for duplicate slot check
     if (process.env.NODE_ENV !== 'production') {
@@ -88,6 +94,7 @@ export function renderMixin (Vue: Class<Component>) {
     // render self
     let vnode
     try {
+      // 生成VNode
       vnode = render.call(vm._renderProxy, vm.$createElement)
     } catch (e) {
       handleError(e, vm, `render`)

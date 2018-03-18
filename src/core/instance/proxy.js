@@ -43,6 +43,15 @@ if (process.env.NODE_ENV !== 'production') {
   }
 
   const hasHandler = {
+    /**
+     * Proxy 的 has 方法
+     * 用于拦截对对象的`in`操作
+     * 一下是限制对`_`属性的访问 （报错）
+     *
+     * @param target
+     * @param key
+     * @returns {boolean}
+     */
     has (target, key) {
       const has = key in target
       const isAllowed = allowedGlobals(key) || key.charAt(0) === '_'

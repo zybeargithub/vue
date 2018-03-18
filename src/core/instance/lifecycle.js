@@ -67,6 +67,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
     // based on the rendering backend used.
     if (!prevVnode) {
       // initial render
+      // 开启 patch 阶段 ，期间会调用diff算法来对比新旧 vnode ，然后再更新
       vm.$el = vm.__patch__(
         vm.$el, vnode, hydrating, false /* removeOnly */,
         vm.$options._parentElm,
@@ -158,6 +159,7 @@ export function mountComponent (
   el: ?Element,
   hydrating?: boolean
 ): Component {
+    // 存储真实的el
   vm.$el = el
   if (!vm.$options.render) {
     vm.$options.render = createEmptyVNode
@@ -219,7 +221,7 @@ export function mountComponent (
   // manually mounted instance, call mounted on self
   // mounted is called for render-created child components in its inserted hook
   if (vm.$vnode == null) {
-    vm._isMounted = true
+    vm._isMounted = true // 设置  _isMounted 为 true
     callHook(vm, 'mounted')
   }
   return vm
