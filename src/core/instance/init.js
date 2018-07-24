@@ -20,6 +20,7 @@ export function initMixin (Vue: Class<Component>) {
   Vue.prototype._init = function (options?: Object) {
     const vm: Component = this
     // a uid
+    // 记录当前Vue实例的个数
     vm._uid = uid++
 
     let startTag, endTag

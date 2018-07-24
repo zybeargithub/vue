@@ -138,6 +138,7 @@ export function defineReactive (
   customSetter?: ?Function,
   shallow?: boolean
 ) {
+  // 定义一个观察者
   const dep = new Dep()
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
@@ -154,6 +155,8 @@ export function defineReactive (
    * @type {*}
    */
   let childOb = !shallow && observe(val)
+
+  // 将来应使用Reflect.defineProperty来代替Object的方法
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,

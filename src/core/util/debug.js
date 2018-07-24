@@ -8,8 +8,9 @@ export let tip = noop
 export let generateComponentTrace = (noop: any) // work around flow check
 export let formatComponentName = (noop: any)
 
+// 只有在开发模式下，才会打印日志
 if (process.env.NODE_ENV !== 'production') {
-  const hasConsole = typeof console !== 'undefined'
+  const hasConsole = typeof console !== 'undefined' // 验证是否支持 console
   const classifyRE = /(?:^|[-_])(\w)/g
   const classify = str => str
     .replace(classifyRE, c => c.toUpperCase())
@@ -18,6 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
   warn = (msg, vm) => {
     const trace = vm ? generateComponentTrace(vm) : ''
 
+    // 支持配置
     if (config.warnHandler) {
       config.warnHandler.call(null, msg, vm, trace)
     } else if (hasConsole && (!config.silent)) {
