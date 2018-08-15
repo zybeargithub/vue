@@ -333,6 +333,11 @@ export function deactivateChildComponent (vm: Component, direct?: boolean) {
   }
 }
 
+/**
+ * 从 VM 的 options 中去寻找 hook 函数，再去执行钩子函数的调用
+ * @param vm
+ * @param hook
+ */
 export function callHook (vm: Component, hook: string) {
   const handlers = vm.$options[hook]
   if (handlers) {

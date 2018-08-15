@@ -59,7 +59,8 @@ export function initState (vm: Component) {
     initProps(vm, opts.props)
   }
 
-  // 初始化 methods
+  // 初始化【vm代理】 methods
+  // 实际上将methods方法直接挂到vm对象上
   if (opts.methods) {
     initMethods(vm, opts.methods)
   }
@@ -144,12 +145,13 @@ function initData (vm: Component) {
   // proxy data on instance
   const keys = Object.keys(data)
   const props = vm.$options.props
-  const methods = vm.$options.methods
+  const methods = vm.$options.methods // 需要执行严格的去重校验
   let i = keys.length
   // 倒叙循环，vm 依次代理 _data 的 key
   while (i--) {
     const key = keys[i]
     if (process.env.NODE_ENV !== 'production') {
+      // 不能和 methods 里面的 fn 重名
       if (methods && hasOwn(methods, key)) {
         warn(
           `Method "${key}" has already been defined as a data property.`,
@@ -157,6 +159,7 @@ function initData (vm: Component) {
         )
       }
     }
+    // 不能和 props 重名
     if (props && hasOwn(props, key)) {
       process.env.NODE_ENV !== 'production' && warn(
         `The data property "${key}" is already declared as a prop. ` +
@@ -164,12 +167,13 @@ function initData (vm: Component) {
         vm
       )
     } else if (!isReserved(key)) {
-      // vm代理data
+      // 挂到vm上  --- vm代理data
       proxy(vm, `_data`, key)
     }
   }
 
   // 第三阶段：观察者模式
+  // 为 data 添加观察者 【重要流程】
   observe(data, true /* asRootData */)
 }
 
@@ -297,6 +301,7 @@ function initMethods (vm: Component, methods: Object) {
         )
       }
     }
+    // 将方法绑定到 vm 上
     vm[key] = methods[key] == null ? noop : bind(methods[key], vm)
   }
 }

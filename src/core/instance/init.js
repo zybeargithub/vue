@@ -40,6 +40,7 @@ export function initMixin (Vue: Class<Component>) {
       // internal component options needs special treatment.
       initInternalComponent(vm, options)
     } else {
+      // 将 options 挂到 vm上
       vm.$options = mergeOptions(
         resolveConstructorOptions(vm.constructor),
         options || {},
@@ -48,7 +49,8 @@ export function initMixin (Vue: Class<Component>) {
     }
     /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
-      initProxy(vm) // 添加访问拦截 使用最新 Proxy 类
+      // 使用 Proxy 类，对 vm 对象架设拦截
+      initProxy(vm)
     } else {
       vm._renderProxy = vm
     }
@@ -57,7 +59,7 @@ export function initMixin (Vue: Class<Component>) {
     initLifecycle(vm)
     initEvents(vm)
     initRender(vm)
-    callHook(vm, 'beforeCreate')
+    callHook(vm, 'beforeCreate')// 钩子函数，实现较简单
     initInjections(vm) // resolve injections before data/props
     initState(vm)// 劫持数据环节，并添加 watcher
     initProvide(vm) // resolve provide after data/props

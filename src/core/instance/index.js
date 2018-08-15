@@ -14,7 +14,7 @@ import { warn } from '../util/index'
 
 /**
  * 定义 Vue ，并未 Vue 添加必要方法
- * @param options
+ * @param options 传入的 opts 条目
  * @constructor
  */
 function Vue (options) {

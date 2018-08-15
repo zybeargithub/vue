@@ -138,7 +138,7 @@ export function defineReactive (
   customSetter?: ?Function,
   shallow?: boolean
 ) {
-  // 定义一个观察者
+  // 为每一个属性项，添加一个观察者
   const dep = new Dep()
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
