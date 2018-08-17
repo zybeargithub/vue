@@ -55,17 +55,21 @@ export function initState (vm: Component) {
   vm._watchers = []
   // options 的传递方式比较特殊
   const opts = vm.$options
+
+  // 组件传值
+  // 实际上：安装 data 来劫持
   if (opts.props) {
     initProps(vm, opts.props)
   }
 
   // 初始化【vm代理】 methods
-  // 实际上将methods方法直接挂到vm对象上
+  // 实际上：将 methods 方法直接挂到vm对象上
   if (opts.methods) {
     initMethods(vm, opts.methods)
   }
 
   // 初始化 data 注入
+  // 劫持 data
   if (opts.data) {
     initData(vm)
   } else {
@@ -83,6 +87,11 @@ export function initState (vm: Component) {
   }
 }
 
+/**
+ * 
+ * @param {*} vm
+ * @param {*} propsOptions
+ */
 function initProps (vm: Component, propsOptions: Object) {
   const propsData = vm.$options.propsData || {}
   const props = vm._props = {}
@@ -311,7 +320,7 @@ function initWatch (vm: Component, watch: Object) {
     const handler = watch[key]
     if (Array.isArray(handler)) {
       for (let i = 0; i < handler.length; i++) {
-        createWatcher(vm, key, handler[i])
+        createW–atcher(vm, key, handler[i])
       }
     } else {
       createWatcher(vm, key, handler)

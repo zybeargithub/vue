@@ -159,7 +159,7 @@ export function mountComponent (
   el: ?Element,
   hydrating?: boolean
 ): Component {
-    // 存储真实的el
+  // 缓存真实 dom 对象
   vm.$el = el
   if (!vm.$options.render) {
     vm.$options.render = createEmptyVNode
