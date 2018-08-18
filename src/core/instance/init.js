@@ -13,10 +13,15 @@ import { extend, mergeOptions, formatComponentName } from '../util/index'
 let uid = 0
 
 /**
- * 为 Vue 添加 _init 方法
- * @param Vue
+ * 使用 mixin 模式，为 Vue 添加 _init 方法（prototype）
+ * @param Vue vue对象
  */
 export function initMixin (Vue: Class<Component>) {
+
+  /**
+   * 在 Vue 的 prototype 添加 _init 的私有方法
+   * @param options 携带参数options
+   */
   Vue.prototype._init = function (options?: Object) {
     const vm: Component = this
     // a uid
@@ -56,13 +61,20 @@ export function initMixin (Vue: Class<Component>) {
     }
     // expose real self
     vm._self = vm
+    // 初始化生命周期的，并加上标识
     initLifecycle(vm)
+    // 初始化事件
     initEvents(vm)
+    // 初始化渲染
     initRender(vm)
-    callHook(vm, 'beforeCreate')// 钩子函数，实现较简单
+    // 调用 beforeCreate 的钩子函数
+    callHook(vm, 'beforeCreate')
     initInjections(vm) // resolve injections before data/props
-    initState(vm)// 劫持数据环节，并添加 watcher
+    // 初始化 props,methods,data,computed,watch
+    // 劫持data,props,vm 代理methods
+    initState(vm)
     initProvide(vm) // resolve provide after data/props
+    // 调用 created 的钩子函数
     callHook(vm, 'created')
 
     /* istanbul ignore if */
@@ -72,6 +84,7 @@ export function initMixin (Vue: Class<Component>) {
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
 
+    // 启动 mount 渲染流程
     if (vm.$options.el) {
       vm.$mount(vm.$options.el)
     }
