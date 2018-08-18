@@ -86,7 +86,7 @@ const builds = {
   'web-full-dev': {
     entry: resolve('web/entry-runtime-with-compiler.js'),
     dest: resolve('dist/vue.js'),
-    format: 'umd',
+    format: 'umd',// umd 通用模块规范，兼容amd和commonJS规范，也支持旧规范
     env: 'development',
     alias: { he: './entity-decoder' },
     banner
