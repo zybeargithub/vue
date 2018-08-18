@@ -44,6 +44,7 @@ export function isObject (obj: mixed): boolean %checks {
 
 /**
  * Get the raw type string of a value e.g. [object Object]
+ * 方面书写，才缓存下来
  */
 const _toString = Object.prototype.toString
 
@@ -133,6 +134,7 @@ export function remove (arr: Array<any>, item: any): Array<any> | void {
 
 /**
  * Check whether the object has the property.
+ * 应该使用 Reflect.has 的方法来判断
  */
 const hasOwnProperty = Object.prototype.hasOwnProperty
 export function hasOwn (obj: Object | Array<*>, key: string): boolean {
