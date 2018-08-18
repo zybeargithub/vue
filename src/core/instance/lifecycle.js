@@ -41,7 +41,7 @@ export function initLifecycle (vm: Component) {
   vm._watcher = null
   vm._inactive = null
   vm._directInactive = false
-  vm._isMounted = false
+  vm._isMounted = false // 是否已经挂载
   vm._isDestroyed = false
   vm._isBeingDestroyed = false
 }
@@ -55,9 +55,12 @@ export function lifecycleMixin (Vue: Class<Component>) {
    */
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
+
+    // 如果已经挂载，则发布 beforeUpdate 钩子函数
     if (vm._isMounted) {
       callHook(vm, 'beforeUpdate')
     }
+
     const prevEl = vm.$el
     const prevVnode = vm._vnode
     const prevActiveInstance = activeInstance
@@ -68,6 +71,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
     if (!prevVnode) {
       // initial render
       // 开启 patch 阶段 ，期间会调用diff算法来对比新旧 vnode ，然后再更新
+      // 【diff算法，结束后在patch到DOM中】
       vm.$el = vm.__patch__(
         vm.$el, vnode, hydrating, false /* removeOnly */,
         vm.$options._parentElm,
