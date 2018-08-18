@@ -19,10 +19,12 @@ export default class Dep {
     this.subs = []
   }
 
+  // 添加 watcher 对象
   addSub (sub: Watcher) {
     this.subs.push(sub)
   }
 
+  // 移除 watcher 对象
   removeSub (sub: Watcher) {
     remove(this.subs, sub)
   }
@@ -33,6 +35,7 @@ export default class Dep {
     }
   }
 
+  // 发布通告
   notify () {
     // stabilize the subscriber list first
     const subs = this.subs.slice()
@@ -45,11 +48,14 @@ export default class Dep {
 // the current target watcher being evaluated.
 // this is globally unique because there could be only one
 // watcher being evaluated at any time.
-Dep.target = null
-const targetStack = []
+Dep.target = null // 全局对象
+const targetStack = [] // target的栈对象
 
 export function pushTarget (_target: Watcher) {
-  if (Dep.target) targetStack.push(Dep.target)
+  if (Dep.target) {
+    targetStack.push(Dep.target)
+  }
+
   Dep.target = _target
 }
 
