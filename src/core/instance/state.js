@@ -57,7 +57,7 @@ export function initState (vm: Component) {
   const opts = vm.$options
 
   // 组件传值
-  // 实际上：安装 data 来劫持
+  // 实际上：按照 data 来劫持
   if (opts.props) {
     initProps(vm, opts.props)
   }
@@ -73,6 +73,7 @@ export function initState (vm: Component) {
   if (opts.data) {
     initData(vm)
   } else {
+    // 无 data 对象时，自动赋值为 {}
     observe(vm._data = {}, true /* asRootData */)
   }
 
@@ -151,10 +152,18 @@ function initData (vm: Component) {
       vm
     )
   }
+
+  // -------------------------
+  // vm 来代理 data 环节
+  // -------------------------
+
   // proxy data on instance
   const keys = Object.keys(data)
+
+  // data 与 props 去重判断
+  // data 与 methods 去重判断
   const props = vm.$options.props
-  const methods = vm.$options.methods // 需要执行严格的去重校验
+  const methods = vm.$options.methods
   let i = keys.length
   // 倒叙循环，vm 依次代理 _data 的 key
   while (i--) {
@@ -180,6 +189,11 @@ function initData (vm: Component) {
       proxy(vm, `_data`, key)
     }
   }
+
+  // --------------------------
+  // 为 data 添加 observe 环节
+  // 观察者模式
+  // --------------------------
 
   // 第三阶段：观察者模式
   // 为 data 添加观察者 【重要流程】
