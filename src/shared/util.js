@@ -3,25 +3,49 @@
 export const emptyObject = Object.freeze({})
 
 // these helpers produces better vm code in JS engines due to their
-// explicitness and function inlining
+// explicitness（明确的） and function inlining（直接插入）
+
+/**
+ * 判断对象是否是 undefined 或者 null
+ * @param {*} v 任意对象
+ * @returns {boolean} true or false will be returned
+ */
 export function isUndef (v: any): boolean %checks {
   return v === undefined || v === null
 }
 
+/**
+ * 判断对象是否是已经定义，非 undefined or null
+ * @param {*} v
+ * @returns {boolean}
+ */
 export function isDef (v: any): boolean %checks {
   return v !== undefined && v !== null
 }
 
+/**
+ * 判断对象是否是true
+ *
+ * @param {*} v
+ * @returns {boolean}
+ */
 export function isTrue (v: any): boolean %checks {
   return v === true
 }
 
+/**
+ * 判断对象是否是 false
+ *
+ * @param {*} v
+ * @returns {boolean}
+ */
 export function isFalse (v: any): boolean %checks {
   return v === false
 }
 
 /**
- * Check if value is primitive
+ * 判断对象是否是原始对象
+ * Check if value is primitive(原始的，落后的)
  */
 export function isPrimitive (value: any): boolean %checks {
   return (
@@ -124,6 +148,7 @@ export const isReservedAttribute = makeMap('key,ref,slot,slot-scope,is')
  * Remove an item from an array
  */
 export function remove (arr: Array<any>, item: any): Array<any> | void {
+  // 如果 arr.length === 0, 则会 if (false) 等效
   if (arr.length) {
     const index = arr.indexOf(item)
     if (index > -1) {
