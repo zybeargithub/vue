@@ -135,7 +135,8 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
     Object.isExtensible(value) &&
     !value._isVue
   ) {
-    // 实例化 Ob 对象
+    // 使用 ob 为 data 中的每个属性添加 get/set
+    // 并使用 Dep 桥接 Watcher 和 Observer 之间的关系
     ob = new Observer(value)
   }
 
@@ -203,6 +204,8 @@ export function defineReactive (
       if (process.env.NODE_ENV !== 'production' && customSetter) {
         customSetter()
       }
+
+      // 执行 value 上已定义的 set 方法
       if (setter) {
         setter.call(obj, newVal)
       } else {
