@@ -1,9 +1,17 @@
 /* @flow */
 
-// can we use __proto__?
-export const hasProto = '__proto__' in {}
+// -----------------------------------
+// 环境检测
+// 1、是否支持 __proto__
+// 2、浏览器版本判断
+// 3、weex 和 native 环境判断
+// Set定义，（预计是兼容性写法）
+// -----------------------------------
 
-// Browser environment sniffing
+// can we use __proto__?
+export const hasProto = '__proto__' in {} // 检查是否能够使用 __proto___
+
+// Browser environment sniffing(侦听，问，嗅)
 export const inBrowser = typeof window !== 'undefined'
 export const inWeex = typeof WXEnvironment !== 'undefined' && !!WXEnvironment.platform
 export const weexPlatform = inWeex && WXEnvironment.platform.toLowerCase()

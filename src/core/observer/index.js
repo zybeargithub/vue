@@ -41,12 +41,18 @@ export class Observer {
     this.value = value
     this.dep = new Dep()
     this.vmCount = 0
-    def(value, '__ob__', this) // value 挂载自己
+    // 给 value 添加 __ob__ 属性，并赋值为 Observer 实例
+    // value.__ob__ = this，就是挂载自己个
+    def(value, '__ob__', this)
+    
+    // 监控 array 和 object
     if (Array.isArray(value)) {
       const augment = hasProto
         ? protoAugment
         : copyAugment
       augment(value, arrayMethods, arrayKeys)
+
+      // 遍历 array，并监控 array
       this.observeArray(value)
     } else {
       // 为每一个data属性添加拦截
@@ -101,30 +107,43 @@ function copyAugment (target: Object, src: Object, keys: Array<string>) {
 }
 
 /**
+ * 类似一个工厂方法
+ * 创造 ob 对象，没有则新创建，有则返回缓存
  * Attempt to create an observer instance for a value,
  * returns the new observer if successfully observed,
  * or the existing observer if the value already has one.
  */
 export function observe (value: any, asRootData: ?boolean): Observer | void {
+  // 如果是非 Object 对象，并且是 VNode 对象
   if (!isObject(value) || value instanceof VNode) {
     return
   }
+
+  // 代码分段较少
+
+  // ob: Observer 对象实例
   let ob: Observer | void
+  // 在 value 中存在 __ob__, 并且是 Observer 的实例，则将
+  // Observer的实例挂载到 __ob__ 对象上
+  // 应用层缓存
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
   } else if (
+    // value 排除 array,
     observerState.shouldConvert &&
     !isServerRendering() &&
     (Array.isArray(value) || isPlainObject(value)) &&
     Object.isExtensible(value) &&
     !value._isVue
   ) {
-    // 劫持属性
+    // 实例化 Ob 对象
     ob = new Observer(value)
   }
+
   if (asRootData && ob) {
     ob.vmCount++
   }
+  // 未使用到这个 return ，why?
   return ob
 }
 
@@ -138,6 +157,7 @@ export function defineReactive (
   customSetter?: ?Function,
   shallow?: boolean
 ) {
+  // 使用闭包特性
   // 为每一个属性项，添加一个观察者
   const dep = new Dep()
 
@@ -147,13 +167,12 @@ export function defineReactive (
   }
 
   // cater for pre-defined getter/setters
+  // 如果 property 上含有 get 和 set方法，则取出来
+  // 不污染的作用
   const getter = property && property.get
   const setter = property && property.set
 
-  /**
-   * 为 data 数据设置 getter 和 setter
-   * @type {*}
-   */
+  // 对象的子对象递归进行 observer
   let childOb = !shallow && observe(val)
 
   // 将来应使用Reflect.defineProperty来代替Object的方法
@@ -161,6 +180,7 @@ export function defineReactive (
     enumerable: true,
     configurable: true,
     get: function reactiveGetter () {
+      // 执行 value 已定义的 get 方法
       const value = getter ? getter.call(obj) : val
       if (Dep.target) {
         dep.depend()
@@ -175,6 +195,7 @@ export function defineReactive (
     },
     set: function reactiveSetter (newVal) {
       const value = getter ? getter.call(obj) : val
+      // 如果是value未变，则不需要走流程
       /* eslint-disable no-self-compare */
       if (newVal === value || (newVal !== newVal && value !== value)) {
         return

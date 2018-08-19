@@ -6,6 +6,7 @@ export const ASSET_TYPES = [
   'filter'
 ]
 
+// 生命周期中的钩子函数列表
 export const LIFECYCLE_HOOKS = [
   'beforeCreate',
   'created',

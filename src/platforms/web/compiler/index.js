@@ -8,7 +8,9 @@ import { createCompiler } from 'compiler/index'
  *  运行得到 compile, compileToFunctions
  * return {
  *     compile,
- *    compileToFunctions: createCompileToFunctionFn(compile)// 集成 to-function.js 中的 compileToFunctions
+ *     // 集成 to-function.js 中的 compileToFunctions
+ *    compileToFunctions: createCompileToFunctionFn(compile)
+ *    
  *   }
  *
  * compile            = create-compiler.js // function compile {...}

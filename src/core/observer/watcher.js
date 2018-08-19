@@ -52,6 +52,8 @@ export default class Watcher {
     if (isRenderWatcher) {
       vm._watcher = this
     }
+
+    // vm存放的订阅者列表
     vm._watchers.push(this)
     // options
     if (options) {
@@ -75,6 +77,7 @@ export default class Watcher {
       : ''
     // parse expression for getter
     if (typeof expOrFn === 'function') {
+      // 将 updateComponent(lifecycle.js) 赋值给 getter
       this.getter = expOrFn
     } else {
       this.getter = parsePath(expOrFn)
@@ -88,16 +91,24 @@ export default class Watcher {
         )
       }
     }
-    this.value = this.lazy ? undefined : this.get()
+
+    // 如果没有 lazy 的话，则直接执行 updateComponent 函数
+    this.value = this.lazy
+      ? undefined
+      : this.get()
   }
 
   /**
    * Evaluate the getter, and re-collect dependencies.
    */
   get () {
+    // 将自身实例（wathcer）赋值给 Dep.target,作为依赖收集
     pushTarget(this)
+
     let value
     const vm = this.vm
+
+    // 启动渲染流程，此时：getter=updateComponent
     try {
       value = this.getter.call(vm, vm) // 执行回调
     } catch (e) {
@@ -110,8 +121,10 @@ export default class Watcher {
       // "touch" every property so they are all tracked as
       // dependencies for deep watching
       if (this.deep) {
-        traverse(value)
+        traverse(value) // traverse 穿越，走过
       }
+
+      // 将观察者实例从target栈中取出并设置给Dep.target
       popTarget()
       this.cleanupDeps()
     }
@@ -137,12 +150,16 @@ export default class Watcher {
    */
   cleanupDeps () {
     let i = this.deps.length
+
+    // 这种写法，体现出js的精髓，碰到0, 0就是false
+    // while(0) 自动停止循环
     while (i--) {
       const dep = this.deps[i]
       if (!this.newDepIds.has(dep.id)) {
         dep.removeSub(this)
       }
     }
+    
     let tmp = this.depIds
     this.depIds = this.newDepIds
     this.newDepIds = tmp

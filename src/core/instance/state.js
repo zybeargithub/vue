@@ -55,20 +55,25 @@ export function initState (vm: Component) {
   vm._watchers = []
   // options 的传递方式比较特殊
   const opts = vm.$options
+
+  // 组件传值
+  // 实际上：按照 data 来劫持
   if (opts.props) {
     initProps(vm, opts.props)
   }
 
   // 初始化【vm代理】 methods
-  // 实际上将methods方法直接挂到vm对象上
+  // 实际上：将 methods 方法直接挂到vm对象上
   if (opts.methods) {
     initMethods(vm, opts.methods)
   }
 
   // 初始化 data 注入
+  // 劫持 data
   if (opts.data) {
     initData(vm)
   } else {
+    // 无 data 对象时，自动赋值为 {}
     observe(vm._data = {}, true /* asRootData */)
   }
 
@@ -83,6 +88,11 @@ export function initState (vm: Component) {
   }
 }
 
+/**
+ * 
+ * @param {*} vm
+ * @param {*} propsOptions
+ */
 function initProps (vm: Component, propsOptions: Object) {
   const propsData = vm.$options.propsData || {}
   const props = vm._props = {}
@@ -142,10 +152,18 @@ function initData (vm: Component) {
       vm
     )
   }
+
+  // -------------------------
+  // vm 来代理 data 环节
+  // -------------------------
+
   // proxy data on instance
   const keys = Object.keys(data)
+
+  // data 与 props 去重判断
+  // data 与 methods 去重判断
   const props = vm.$options.props
-  const methods = vm.$options.methods // 需要执行严格的去重校验
+  const methods = vm.$options.methods
   let i = keys.length
   // 倒叙循环，vm 依次代理 _data 的 key
   while (i--) {
@@ -171,6 +189,11 @@ function initData (vm: Component) {
       proxy(vm, `_data`, key)
     }
   }
+
+  // --------------------------
+  // 为 data 添加 observe 环节
+  // 观察者模式
+  // --------------------------
 
   // 第三阶段：观察者模式
   // 为 data 添加观察者 【重要流程】
@@ -311,7 +334,7 @@ function initWatch (vm: Component, watch: Object) {
     const handler = watch[key]
     if (Array.isArray(handler)) {
       for (let i = 0; i < handler.length; i++) {
-        createWatcher(vm, key, handler[i])
+        createW–atcher(vm, key, handler[i])
       }
     } else {
       createWatcher(vm, key, handler)

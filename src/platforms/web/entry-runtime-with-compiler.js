@@ -1,9 +1,8 @@
 /* @flow */
 
-
-/*** 打包入口 ****/
-/*** VUE 入口  ****/
-/*** 打包入口 ****/
+// ------------------
+// dev 打包入口
+// ------------------
 
 import config from 'core/config'
 import { warn, cached } from 'core/util/index'
@@ -20,13 +19,14 @@ const idToTemplate = cached(id => {
 })
 
 /**
- * 缓存 Vue.prototype.$mount,
+ * 缓存 Vue.prototype.$mount(../web/runtime/index.js中定义),
  * 下面会覆盖整个方法
  */
 const mount = Vue.prototype.$mount
 
 /**
  * 将template转换为render的function,然后mount（）
+ * 【重要过程】将el编译成render的function形式
  * @param el
  * @param hydrating
  * @returns {*}
@@ -74,6 +74,7 @@ Vue.prototype.$mount = function (
       // 获取模板
       template = getOuterHTML(el)
     }
+
     if (template) {
       /* istanbul ignore if */
       if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
@@ -91,6 +92,7 @@ Vue.prototype.$mount = function (
       }, this)
 
       // 存储到 options上，在render上调用并生成VNode
+      // staticRenderFns 是优化的部分
       options.render = render
       options.staticRenderFns = staticRenderFns
 
