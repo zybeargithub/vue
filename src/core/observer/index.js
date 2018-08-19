@@ -44,7 +44,6 @@ export class Observer {
     // 给 value 添加 __ob__ 属性，并赋值为 Observer 实例
     // value.__ob__ = this，就是挂载自己个
     def(value, '__ob__', this)
-    
     // 监控 array 和 object
     if (Array.isArray(value)) {
       const augment = hasProto
