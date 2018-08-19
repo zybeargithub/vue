@@ -152,7 +152,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
 }
 
 /**
- * 定义 mount
+ * 挂载、更新 Vue 的 Component 到 DOM中
  * @param vm
  * @param el
  * @param hydrating
@@ -209,6 +209,7 @@ export function mountComponent (
     }
   } else {
     updateComponent = () => {
+      // vm._render方法被执行时，将会获取 data 中的属性，调用 get方法
       vm._update(vm._render(), hydrating) // 执行 _render() 拿到 VNode
     }
   }
