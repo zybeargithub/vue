@@ -12,7 +12,7 @@ let uid = 0
 export default class Dep {
   static target: ?Watcher;
   id: number;
-  subs: Array<Watcher>;
+  subs: Array<Watcher>; // 存储所有的 watcher
 
   constructor () {
     this.id = uid++
@@ -29,6 +29,7 @@ export default class Dep {
     remove(this.subs, sub)
   }
 
+  // 依赖收集
   depend () {
     if (Dep.target) {
       Dep.target.addDep(this)
@@ -40,7 +41,7 @@ export default class Dep {
     // stabilize the subscriber list first
     const subs = this.subs.slice()
     for (let i = 0, l = subs.length; i < l; i++) {
-      subs[i].update()
+      subs[i].update() // 调用 watcher 对象的 update 的方法
     }
   }
 }
