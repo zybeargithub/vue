@@ -89,7 +89,6 @@ export function initState (vm: Component) {
 }
 
 /**
- * 
  * @param {*} vm
  * @param {*} propsOptions
  */
@@ -186,6 +185,7 @@ function initData (vm: Component) {
       )
     } else if (!isReserved(key)) {
       // 挂到vm上  --- vm代理data
+      // 这样定义在 data 中的值，可以 this.message,而不是 this.data.message
       proxy(vm, `_data`, key)
     }
   }
@@ -334,7 +334,7 @@ function initWatch (vm: Component, watch: Object) {
     const handler = watch[key]
     if (Array.isArray(handler)) {
       for (let i = 0; i < handler.length; i++) {
-        createW–atcher(vm, key, handler[i])
+        createWatcher(vm, key, handler[i])
       }
     } else {
       createWatcher(vm, key, handler)
